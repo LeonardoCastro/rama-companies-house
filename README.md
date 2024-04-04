@@ -42,7 +42,30 @@ $ pip install -e .
 
 ## User guide
 
-Coming soon.
+The cleaning and pre-processing has been wrapped in the function `initialise()`. 
+
+```python
+from rama import initialise
+
+path = "local_path_to_files"
+companies_filename = "companies.csv"
+psc_filename = "psc.csv"
+
+string_nature = "ownership-of-shares"
+
+graph, connected_components, dict_cluster = initialise(path, psc_filename, companies_filename, string_nature)
+```
+
+There is also a wrapper to initialise for graphs with only humans as root
+
+```python
+from rama import initialise_humans
+
+graph, connected_components, graphs_with_humans = initialise_humans(path, psc_filename, companies_filename, string_nature)
+```
+
+** Coming soon ** 
+A collection of notebooks can be found in `notebooks/` with a series of quick and simple tutorial on how to analyse the processed data. 
 
 ## Contact
 

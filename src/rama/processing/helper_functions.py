@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 
-def check_dir_exists(path):
+def check_dir_exists(path: str):
     """Checks if folder directory already exists, else makes directory.
     Args:
         path (str): folder path for saving.
@@ -18,7 +18,7 @@ def check_dir_exists(path):
         print(f"Folder exists: {path}")
 
 
-def get_mutual_company_numbers(psc, companies):
+def get_mutual_company_numbers(psc: pd.DataFrame, companies: pd.DataFrame):
     """Function to match company numbers from PSCs and companies"""
     company_numbers_psc = psc.company_number.values
     if "CompanyNumer" in companies.columns:
@@ -33,7 +33,7 @@ def get_mutual_company_numbers(psc, companies):
     return mutual_company_numbers
 
 
-def fill_company_number(x, max_length=8):
+def fill_company_number(x: str, max_length=8):
     """Function to fill the company number with 0s to get a uniform format for them"""
     missing_length = max_length - len(x)
 
