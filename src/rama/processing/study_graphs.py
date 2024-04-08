@@ -1,10 +1,12 @@
+from collections import deque
 import numpy as np
+import networkx as nx
 import datetime as dt
 
 ############ Paths ############
 
 
-def find_all_paths(graph, x, path=None):
+def find_all_paths(graph: nx.DiGraph, x: int | str, path: deque | None = None) -> deque:
     """function to find all paths in a graph starting in a given node"""
     if path is None:
         path = []
@@ -20,16 +22,16 @@ def find_all_paths(graph, x, path=None):
     return paths
 
 
-def keep_longest_path(list_paths):
+def keep_longest_path(list_paths: deque) -> deque:
     """Function to keep only the longest paths from a list of paths"""
-    max_ = max([len(x) for x in list_paths])
+    max_ = max(len(x) for x in list_paths)
     list_ = [x for x in list_paths if len(x) == max_]
     return list_
 
 
-def get_max_length(graph, list_nodes):
+def get_max_length(graph: nx.DiGraph, list_nodes: deque) -> int:
     """Function to get the max length of a path in a graph"""
-    lens = list()
+    lens = []
     for node in list_nodes:
         lens += find_all_paths(graph, node)
     max_len = len(keep_longest_path(lens)[0]) - 1
@@ -39,7 +41,9 @@ def get_max_length(graph, list_nodes):
 ############ Dates ############
 
 
-def get_dates_with_nans(graph, list_nodes, format_date="%Y-%m-%d"):
+def get_dates_with_nans(
+    graph: nx.DiGraph, list_nodes: deque, format_date: str = "%Y-%m-%d"
+) -> deque:
     """Function to get the dates from an array containing nans"""
     dates_str = np.array(
         [
@@ -58,7 +62,7 @@ def get_dates_with_nans(graph, list_nodes, format_date="%Y-%m-%d"):
     return dates_dt
 
 
-def get_growingtime(dates, period=365.2425):
+def get_growingtime(dates: deque, period: float = 365.2425) -> float:
     """Function to get the growing time of a given array of dates."""
     dates_without_nans = [date for date in dates if isinstance(date, dt.datetime)]
     if len(dates_without_nans) != 0:
@@ -70,7 +74,7 @@ def get_growingtime(dates, period=365.2425):
     return life_years
 
 
-def get_min_max_dates(dates):
+def get_min_max_dates(dates: deque) -> tuple:
     """Function to get the min and max dates from an array"""
     dates = [date for date in dates if isinstance(date, dt.datetime)]
     if len(dates) != 0:
@@ -86,12 +90,16 @@ def get_min_max_dates(dates):
 
 
 def get_detail_branches(
-    graph, branches, dates_of_creation_dt, format_date="%Y-%m-%d", period=365.2425
-):
+    graph: nx.DiGraph,
+    branches: deque,
+    dates_of_creation_dt: deque,
+    format_date: str = "%Y-%m-%d",
+    period: float = 365.2425,
+) -> dict:
     """Function to get the local details of branches into a dictionary"""
-    detail_branches = dict()
+    detail_branches = {}
     for b, branch in enumerate(branches):
-        dict_local = dict()
+        dict_local = {}
         sprouts = [edge[1] for edge in graph.edges if branch == edge[0]]
 
         sprouts_dates_str = [graph.nodes[sprout]["date_of_creation"] for sprout in sprouts]
@@ -124,10 +132,11 @@ def get_detail_branches(
     return detail_branches
 
 
-def get_dict_branches(graph, list_nodes, period=365.2425, format_date="%Y-%m-%d"):
+def get_dict_branches(
+    graph: nx.DiGraph, list_nodes: deque, period: float = 365.2425, format_date: str = "%Y-%m-%d"
+) -> dict:
     """Function to get the dictionary of all branches"""
-    dict_branches = dict()
-
+    dict_branches = {}
     dates_subgraph = [graph.nodes[node]["date_of_creation"] for node in list_nodes]
     dates_subgraph_dt = [
         dt.datetime.strptime(date, format_date) for date in dates_subgraph if isinstance(date, str)
@@ -168,18 +177,18 @@ def get_dict_branches(graph, list_nodes, period=365.2425, format_date="%Y-%m-%d"
 ############### Obtain dictionary ############
 
 
-def get_dict_cluster(graph, list_nodes):
+def get_dict_cluster(graph: nx.DiGraph, list_nodes: deque) -> dict:
     """Function to get the dictionary of a subgraph"""
     in_degrees = np.array([graph.nodes[node]["in_degree"] for node in list_nodes])
     out_degrees = np.array([graph.nodes[node]["out_degree"] for node in list_nodes])
     degrees = list(zip(in_degrees, out_degrees))
 
-    humans = sum([graph.nodes[node]["human"] for node in list_nodes])
+    humans = sum(graph.nodes[node]["human"] for node in list_nodes)
 
     number_of_nodes = len(list_nodes)
     number_of_roots = len(np.where(in_degrees == 0)[0])
     number_of_branches = sum(
-        [1 for (in_degree, out_degree) in degrees if in_degree != 0 and out_degree > 1]
+        1 for (in_degree, out_degree) in degrees if in_degree != 0 and out_degree > 1
     )
     max_length = get_max_length(graph, list_nodes)
 
@@ -210,7 +219,7 @@ def get_dict_cluster(graph, list_nodes):
 ############ Classification ############
 
 
-def classify_cluster(dict_cluster):
+def classify_cluster(dict_cluster: dict) -> dict:
     """Function to classify networks through their number of branches and roots"""
     number_of_nodes = dict_cluster["number_of_nodes"]
     number_of_roots = dict_cluster["number_of_roots"]

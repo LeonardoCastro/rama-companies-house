@@ -7,7 +7,12 @@ from rama.src.rama.processing.lists import types_of_ownership
 ########## Main function ##############
 
 
-def set_attributes(graph, merged_firstlink, psc_companies, companies):
+def set_attributes(
+    graph: nx.DiGraph,
+    merged_firstlink: pd.DataFrame,
+    psc_companies: pd.DataFrame,
+    companies: pd.DataFrame,
+) -> None:
     """Function that sets the attributes described in this script to the graph."""
     human_dict = attr_human(graph, merged_firstlink)
     leaf_dict = attr_leaf(graph, merged_firstlink, psc_companies)
@@ -42,7 +47,9 @@ def set_attributes(graph, merged_firstlink, psc_companies, companies):
 
 
 ## Auxiliary functions ##
-def get_company_numbers(psc_companies, df_attr, companies):
+def get_company_numbers(
+    psc_companies: pd.DataFrame, df_attr: pd.DataFrame, companies: pd.DataFrame
+) -> pd.DataFrame:
     """Returns the company numbers of companies only placed on the first column of psc_companies"""
     indices_to_look = psc_companies.idx_company.unique()
     indices_to_look = list(set(indices_to_look).symmetric_difference(set(df_attr.index.unique())))
@@ -66,13 +73,13 @@ def get_company_numbers(psc_companies, df_attr, companies):
 
 
 def get_dict_from_attr_for_companies(
-    attr,
-    graph,
-    merged_firstlink,
-    psc_companies,
-    companies,
-    company_number="company_number",
-):
+    attr: str,
+    graph: nx.DiGraph,
+    merged_firstlink: pd.DataFrame,
+    psc_companies: pd.DataFrame,
+    companies: pd.DataFrame,
+    company_number: str = "company_number",
+) -> dict:
     """General function to return attribute dictionary for companies."""
 
     df1 = psc_companies.copy().set_index("idx_company_2")[[company_number]]
@@ -109,7 +116,9 @@ def get_dict_from_attr_for_companies(
     return attr_dict
 
 
-def attr_kind(graph, merged_firstlink, psc_companies):
+def attr_kind(
+    graph: nx.DiGraph, merged_firstlink: pd.DataFrame, psc_companies: pd.DataFrame
+) -> dict:
     """Returns a dictionary with the psc's kind.
     The dictionary is expected to be passed to nx.set_node_attributes()"""
     attr = "kind"
@@ -135,10 +144,11 @@ def attr_kind(graph, merged_firstlink, psc_companies):
 
         attr_dict = df_final.to_dict()[attr]
         return attr_dict
+    return {}
 
 
 ### Attribute dictionaries ###
-def attr_human(graph, merged_firstlink):
+def attr_human(graph: nx.DiGraph, merged_firstlink: pd.DataFrame) -> dict:
     """Returns a dictionary which answers the question 'is the node a human?'.
     The dictionary is expected to be passed to nx.set_node_attributes()"""
 
@@ -151,7 +161,9 @@ def attr_human(graph, merged_firstlink):
     return human_dict
 
 
-def attr_leaf(graph, merged_firstlink, psc_companies):
+def attr_leaf(
+    graph: nx.DiGraph, merged_firstlink: pd.DataFrame, psc_companies: pd.DataFrame
+) -> dict:
     """Returns a dictionary which answers the question 'is the node a leaf?'.
     The dictionary is expected to be passed to nx.set_node_attributes()"""
 
@@ -171,7 +183,9 @@ def attr_leaf(graph, merged_firstlink, psc_companies):
     return leaf_dict
 
 
-def attr_name(graph, merged_firstlink, psc_companies):
+def attr_name(
+    graph: nx.DiGraph, merged_firstlink: pd.DataFrame, psc_companies: pd.DataFrame
+) -> dict:
     """Returns a dictionary with the nodes' names.
     The dictionary is expected to be passed to nx.set_node_attributes()"""
     attr = "name"
@@ -209,7 +223,12 @@ def attr_name(graph, merged_firstlink, psc_companies):
     return attr_dict
 
 
-def attr_company_numbers(graph, merged_firstlink, psc_companies, companies):
+def attr_company_numbers(
+    graph: nx.DiGraph,
+    merged_firstlink: pd.DataFrame,
+    psc_companies: pd.DataFrame,
+    companies: pd.DataFrame,
+) -> dict:
     """Returns a dictionary with the company numbers of the company nodes.
     The dictionary is expected to be passed to nx.set_node_attributes()"""
     attr = "company_number"
@@ -243,7 +262,12 @@ def attr_company_numbers(graph, merged_firstlink, psc_companies, companies):
     return attr_dict
 
 
-def attr_previous_names(graph, merged_firstlink, psc_companies, companies):
+def attr_previous_names(
+    graph: nx.DiGraph,
+    merged_firstlink: pd.DataFrame,
+    psc_companies: pd.DataFrame,
+    companies: pd.DataFrame,
+) -> dict:
     """Returns a dictionary with the companies' previous names.
     The dictionary is expected to be passed to nx.set_node_attributes()"""
     attr = "previous_company_names"
@@ -254,7 +278,12 @@ def attr_previous_names(graph, merged_firstlink, psc_companies, companies):
     return attr_dict
 
 
-def attr_type(graph, merged_firstlink, psc_companies, companies):
+def attr_type(
+    graph: nx.DiGraph,
+    merged_firstlink: pd.DataFrame,
+    psc_companies: pd.DataFrame,
+    companies: pd.DataFrame,
+) -> dict:
     """Returns a dictionary with the companies' kind.
     The dictionary is expected to be passed to nx.set_node_attributes()"""
     attr = "type"
@@ -265,7 +294,12 @@ def attr_type(graph, merged_firstlink, psc_companies, companies):
     return attr_dict
 
 
-def attr_date_of_creation(graph, merged_firstlink, psc_companies, companies):
+def attr_date_of_creation(
+    graph: nx.DiGraph,
+    merged_firstlink: pd.DataFrame,
+    psc_companies: pd.DataFrame,
+    companies: pd.DataFrame,
+) -> dict:
     """Returns a dictionary with the company numbers of the company nodes.
     The dictionary is expected to be passed to nx.set_node_attributes()"""
     attr = "date_of_creation"
@@ -276,7 +310,12 @@ def attr_date_of_creation(graph, merged_firstlink, psc_companies, companies):
     return attr_dict
 
 
-def attr_sic_codes(graph, merged_firstlink, psc_companies, companies):
+def attr_sic_codes(
+    graph: nx.DiGraph,
+    merged_firstlink: pd.DataFrame,
+    psc_companies: pd.DataFrame,
+    companies: pd.DataFrame,
+) -> dict:
     """Returns a dictionary with the SIC codes of the company nodes.
     The dictionary is expected to be passed to nx.set_node_attributes()"""
     attr = "sic_codes"
@@ -287,7 +326,12 @@ def attr_sic_codes(graph, merged_firstlink, psc_companies, companies):
     return attr_dict
 
 
-def attr_address(graph, merged_firstlink, psc_companies, companies):
+def attr_address(
+    graph: nx.DiGraph,
+    merged_firstlink: pd.DataFrame,
+    psc_companies: pd.DataFrame,
+    companies: pd.DataFrame,
+) -> tuple:
     """Returns two dictionaries with the addresses of nodes.
     One for the registered country and another for the registered postal code.
     The dictionary is expected to be passed to nx.set_node_attributes()"""
@@ -364,7 +408,7 @@ def attr_address(graph, merged_firstlink, psc_companies, companies):
     df_country = addresses[["country"]]
     df_postal_code = addresses[["postal_code"]]
 
-    dict_country = dict()
+    dict_country = {}
     for node in df_country.index.unique():
 
         country = df_country.loc[node, "country"]
@@ -381,7 +425,7 @@ def attr_address(graph, merged_firstlink, psc_companies, companies):
         else:
             dict_country[node] = [country]
 
-    dict_postal_code = dict()
+    dict_postal_code = {}
     for node in df_postal_code.index.unique():
 
         postal_code = df_postal_code.loc[node, "postal_code"]
@@ -401,7 +445,9 @@ def attr_address(graph, merged_firstlink, psc_companies, companies):
     return dict_country, dict_postal_code
 
 
-def get_nature_of_ownership_dict(merged_firstlink, psc_companies):
+def get_nature_of_ownership_dict(
+    merged_firstlink: pd.DataFrame, psc_companies: pd.DataFrame
+) -> dict:
     """Returns a dictionary with the natures of ownership list for each edge.
     The dictionary is expected to be passed to nx.set_edge_attributes()"""
 
@@ -426,8 +472,8 @@ def get_nature_of_ownership_dict(merged_firstlink, psc_companies):
     return weight_dict
 
 
-def get_weight_dict(graph):
-
+def get_weight_dict(graph: nx.DiGraph) -> dict:
+    """Function to get the weight dictionary"""
     dict_weigths_translate = {
         "more-than-25": 0.25,
         "25-to-50": 0.25,
@@ -435,8 +481,8 @@ def get_weight_dict(graph):
         "75-to-100": 0.75,
     }
 
-    dict_weights = dict()
-    edges = [edge for edge in graph.edges(data=True)]
+    dict_weights = {}
+    edges = list(graph.edges(data=True))
 
     for edge in edges:
         edge_tuple = (edge[0], edge[1])

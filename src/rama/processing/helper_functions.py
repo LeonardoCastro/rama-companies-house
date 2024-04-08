@@ -1,10 +1,11 @@
+from typing import Sequence
 import os
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
 
 
-def check_dir_exists(path: str):
+def check_dir_exists(path: str) -> None:
     """Checks if folder directory already exists, else makes directory.
     Args:
         path (str): folder path for saving.
@@ -18,7 +19,7 @@ def check_dir_exists(path: str):
         print(f"Folder exists: {path}")
 
 
-def get_mutual_company_numbers(psc: pd.DataFrame, companies: pd.DataFrame):
+def get_mutual_company_numbers(psc: pd.DataFrame, companies: pd.DataFrame) -> np.ndarray:
     """Function to match company numbers from PSCs and companies"""
     company_numbers_psc = psc.company_number.values
     if "CompanyNumer" in companies.columns:
@@ -33,7 +34,7 @@ def get_mutual_company_numbers(psc: pd.DataFrame, companies: pd.DataFrame):
     return mutual_company_numbers
 
 
-def fill_company_number(x: str, max_length=8):
+def fill_company_number(x: str, max_length: int = 8) -> str:
     """Function to fill the company number with 0s to get a uniform format for them"""
     missing_length = max_length - len(x)
 
@@ -46,13 +47,13 @@ def fill_company_number(x: str, max_length=8):
 
 
 def get_human_company_links(
-    psc,
-    companies,
-    mutual_company_numbers,
-    psc_columns,
-    human_kinds,
-    companies_columns,
-):
+    psc: pd.DataFrame,
+    companies: pd.DataFrame,
+    mutual_company_numbers: Sequence[str],
+    psc_columns: list,
+    human_kinds: list,
+    companies_columns: list,
+) -> pd.DataFrame:
     """Function to link a human PSC with a company they own/control"""
     psc_humans = psc[psc_columns]
     psc_humans = psc_humans.loc[
@@ -107,7 +108,9 @@ def get_human_company_links(
     return merged_firstlink
 
 
-def get_company_company_link(psc, companies, small_firstlink, company_kinds):
+def get_company_company_link(
+    psc: pd.DataFrame, companies: pd.DataFrame, small_firstlink: pd.DataFrame, company_kinds: list
+) -> pd.DataFrame:
     """Function to link a company PSC with another company it owns/controls"""
 
     psc_companies = psc.loc[(psc.kind.isin(company_kinds))].reset_index(drop=True)
@@ -207,31 +210,7 @@ def get_company_company_link(psc, companies, small_firstlink, company_kinds):
     return psc_companies
 
 
-def get_adjacency_matrix(psc_companies, small_firstlink):
-    """Function to get an adjacency matrix"""
-    max_company_number = int(psc_companies.idx_company_2.max()) + 1
-    adjacency_matrix = np.zeros((max_company_number, max_company_number), dtype=np.int8)
-
-    one = np.int8(1)
-
-    min_ = int(small_firstlink.idx_human.min())
-    max_ = int(small_firstlink.idx_human.max())
-
-    for i in range(min_, max_):
-        js = small_firstlink.loc[small_firstlink.idx_human == i, "idx_company"].values.astype(int)
-        adjacency_matrix[i, js] = one
-
-    min_ = int(psc_companies.idx_company.min())
-    max_ = int(psc_companies.idx_company.max())
-
-    for i in range(min_, max_):
-        js = psc_companies.loc[psc_companies.idx_company == i, "idx_company_2"].values.astype(int)
-        adjacency_matrix[i, js] = one
-
-    return adjacency_matrix
-
-
-def get_list_unique_natures_of_control(psc):
+def get_list_unique_natures_of_control(psc: pd.DataFrame) -> list:
     """Function to get a list of the unique natures of control strings"""
     psc.natures_of_control.fillna("", inplace=True)
     natures = psc.natures_of_control.unique()

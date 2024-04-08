@@ -1,3 +1,4 @@
+from typing import Sequence
 import pandas as pd
 import networkx as nx
 
@@ -6,7 +7,12 @@ from rama.src.rama.processing.node_attributes import set_attributes
 from rama.src.rama.processing.study_graphs import get_dict_cluster, classify_cluster
 
 
-def initialise(path, psc_filenames, companies_filenames, string_ownership="ownership-of-shares"):
+def initialise(
+    path: str,
+    psc_filenames: Sequence[str],
+    companies_filenames: Sequence[str],
+    string_ownership: str = "ownership-of-shares",
+) -> tuple:
     """Function to initialise the usual database"""
 
     list_pscs = []
@@ -46,8 +52,11 @@ def initialise(path, psc_filenames, companies_filenames, string_ownership="owner
 
 
 def initialise_humans(
-    path, psc_filenames, companies_filenames, string_ownership="ownership-of-shares"
-):
+    path: str,
+    psc_filenames: Sequence[str],
+    companies_filenames: Sequence[str],
+    string_ownership: str = "ownership-of-shares",
+) -> tuple:
     """Function to initialise and get the graphs with human roots"""
     graph, connected_components, dict_cluster = initialise(
         path, psc_filenames, companies_filenames, string_ownership
