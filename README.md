@@ -42,7 +42,7 @@ $ pip install -e .
 
 ## User guide
 
-The cleaning and pre-processing has been wrapped in the function `initialise()`. 
+The cleaning and pre-processing has been wrapped in the function `initialise()`.
 
 ```python
 from rama import initialise
@@ -64,8 +64,8 @@ from rama import initialise_humans
 graph, connected_components, graphs_with_humans = initialise_humans(path, psc_filename, companies_filename, string_nature)
 ```
 
-** Coming soon ** 
-A collection of notebooks can be found in `notebooks/` with a series of quick and simple tutorial on how to analyse the processed data. 
+** Coming soon **
+A collection of notebooks can be found in `notebooks/` with a series of quick and simple tutorial on how to analyse the processed data.
 
 ## Contact
 

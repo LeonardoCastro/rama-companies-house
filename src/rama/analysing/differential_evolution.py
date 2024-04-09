@@ -1,9 +1,9 @@
 import random
-import networkx as nx
+
 import numpy as np
 from tqdm import tqdm
 
-from rama.src.rama.analysing.transfer_money import loss_function
+from rama.analysing.transfer_money import loss_function
 
 
 def make_profit_dict(profit_distribution, nodes_with_profit, nodes_without_profit):

@@ -1,21 +1,22 @@
 from typing import Sequence
+
+import networkx as nx
 import numpy as np
 import pandas as pd
-import networkx as nx
 
-from rama.src.rama.processing.helper_functions import (
-    get_mutual_company_numbers,
-    get_human_company_links,
+from rama.processing.cleaning import clean_companies, clean_psc
+from rama.processing.helper_functions import (
     get_company_company_link,
+    get_human_company_links,
+    get_mutual_company_numbers,
 )
-from rama.src.rama.processing.lists import (
-    psc_columns,
-    human_kinds,
+from rama.processing.lists import (
     companies_columns,
     company_kinds,
+    human_kinds,
     other_kinds,
+    psc_columns,
 )
-from rama.src.rama.processing.cleaning import clean_psc, clean_companies
 
 
 def process_database(

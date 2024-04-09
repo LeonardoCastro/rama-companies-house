@@ -1,5 +1,5 @@
 import networkx as nx
-import numpy as np
+
 
 dictionary_taxes = dict(
     zip(
@@ -72,9 +72,7 @@ def give_dividends(graph, node, profits):
     wealth = profits[node]
 
     if len(in_hood) != 0:
-        in_weights = sum(
-            graph.edges[(neighbour, node)]["weight"] for neighbour in in_hood
-        )
+        in_weights = sum(graph.edges[(neighbour, node)]["weight"] for neighbour in in_hood)
     else:
         in_weights = 0
 
@@ -84,12 +82,9 @@ def give_dividends(graph, node, profits):
 def recursive_wrapper(graph, profits):
     """Recursive wrapper"""
     dummy_dict = {
-        node: get_dividend_from_neighbours(graph, node, profits)
-        for node in graph.nodes()
+        node: get_dividend_from_neighbours(graph, node, profits) for node in graph.nodes()
     }
-    return_dict = {
-        node: give_dividends(graph, node, dummy_dict) for node in graph.nodes()
-    }
+    return_dict = {node: give_dividends(graph, node, dummy_dict) for node in graph.nodes()}
     return return_dict
 
 
@@ -99,9 +94,7 @@ def theoretical_wealth(graph, node, profits):
 
     for node2 in list(nx.descendants(graph, node)):
         path = nx.shortest_path(graph, node, node2)
-        local_wealth = compose_function(
-            taxes, len(path) - 1, profits[node2], human=False
-        )
+        local_wealth = compose_function(taxes, len(path) - 1, profits[node2], human=False)
         for i in range(len(path) - 1):
             local_wealth *= graph.edges[(path[i], path[i + 1])]["weight"]
         wealth += local_wealth
@@ -114,7 +107,5 @@ def theoretical_wealth(graph, node, profits):
 
 def theoretical_wrapper(graph, profits):
     """Theoretical wrapper"""
-    return_dict = {
-        node: theoretical_wealth(graph, node, profits) for node in graph.nodes()
-    }
+    return_dict = {node: theoretical_wealth(graph, node, profits) for node in graph.nodes()}
     return return_dict

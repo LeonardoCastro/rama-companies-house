@@ -1,10 +1,11 @@
-import pandas as pd
-import numpy as np
 import networkx as nx
+import numpy as np
+import pandas as pd
 
-from rama.src.rama.processing.lists import types_of_ownership
+from rama.processing.lists import types_of_ownership
 
-########## Main function ##############
+
+# Main function
 
 
 def set_attributes(
@@ -46,7 +47,7 @@ def set_attributes(
     nx.set_node_attributes(graph, dict_outdegree, "out_degree")
 
 
-## Auxiliary functions ##
+# Auxiliary functions
 def get_company_numbers(
     psc_companies: pd.DataFrame, df_attr: pd.DataFrame, companies: pd.DataFrame
 ) -> pd.DataFrame:
@@ -104,8 +105,7 @@ def get_dict_from_attr_for_companies(
     set_nodes = set(sorted(list(graph.nodes())))
     set_index = set(df_attr.index.values)
 
-    indices_non_appearing = set_index.symmetric_difference(set_nodes)
-    indices_non_appearing = list(indices_non_appearing)
+    indices_non_appearing = list(set_index.symmetric_difference(set_nodes))
 
     df_non = pd.DataFrame(index=indices_non_appearing)
     df_non[attr] = np.nan
@@ -134,8 +134,7 @@ def attr_kind(
         set_nodes = set(sorted(list(graph.nodes())))
         set_index = set(df_attr.index.values)
 
-        indices_non_appearing = set_index.symmetric_difference(set_nodes)
-        indices_non_appearing = list(indices_non_appearing)
+        indices_non_appearing = list(set_index.symmetric_difference(set_nodes))
 
         df_non = pd.DataFrame(index=indices_non_appearing)
         df_non[attr] = np.nan
@@ -147,7 +146,7 @@ def attr_kind(
     return {}
 
 
-### Attribute dictionaries ###
+# Attribute dictionaries
 def attr_human(graph: nx.DiGraph, merged_firstlink: pd.DataFrame) -> dict:
     """Returns a dictionary which answers the question 'is the node a human?'.
     The dictionary is expected to be passed to nx.set_node_attributes()"""
@@ -211,8 +210,7 @@ def attr_name(
     set_nodes = set(sorted(list(graph.nodes())))
     set_index = set(df_attr.index.values)
 
-    indices_non_appearing = set_index.symmetric_difference(set_nodes)
-    indices_non_appearing = list(indices_non_appearing)
+    indices_non_appearing = list(set_index.symmetric_difference(set_nodes))
 
     df_non = pd.DataFrame(index=indices_non_appearing)
     df_non[attr] = np.nan
@@ -249,8 +247,7 @@ def attr_company_numbers(
     set_nodes = set(sorted(list(graph.nodes())))
     set_index = set(df_attr.index.values)
 
-    indices_non_appearing = set_index.symmetric_difference(set_nodes)
-    indices_non_appearing = list(indices_non_appearing)
+    indices_non_appearing = list(set_index.symmetric_difference(set_nodes))
 
     df_non = pd.DataFrame(index=indices_non_appearing)
     df_non[attr] = np.nan
@@ -396,8 +393,7 @@ def attr_address(
     set_nodes = set(sorted(list(graph.nodes())))
     set_index = set(addresses.index.unique())
 
-    indices_non_appearing = set_index.symmetric_difference(set_nodes)
-    indices_non_appearing = list(indices_non_appearing)
+    indices_non_appearing = list(set_index.symmetric_difference(set_nodes))
 
     df_non = pd.DataFrame(index=indices_non_appearing)
     df_non["country"] = np.nan
@@ -410,7 +406,6 @@ def attr_address(
 
     dict_country = {}
     for node in df_country.index.unique():
-
         country = df_country.loc[node, "country"]
         if isinstance(country, pd.Series):
             list_countries = country.unique()
@@ -427,7 +422,6 @@ def attr_address(
 
     dict_postal_code = {}
     for node in df_postal_code.index.unique():
-
         postal_code = df_postal_code.loc[node, "postal_code"]
         if isinstance(postal_code, pd.Series):
             list_poscal_codes = postal_code.unique()

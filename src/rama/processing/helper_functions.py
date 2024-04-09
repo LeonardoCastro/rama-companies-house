@@ -1,8 +1,8 @@
-from typing import Sequence
 import os
-import pandas as pd
+from typing import Sequence
+
 import numpy as np
-from tqdm import tqdm
+import pandas as pd
 
 
 def check_dir_exists(path: str) -> None:
@@ -22,7 +22,7 @@ def check_dir_exists(path: str) -> None:
 def get_mutual_company_numbers(psc: pd.DataFrame, companies: pd.DataFrame) -> np.ndarray:
     """Function to match company numbers from PSCs and companies"""
     company_numbers_psc = psc.company_number.values
-    if "CompanyNumer" in companies.columns:
+    if "CompanyNumber" in companies.columns:
         mutual_company_numbers = companies.loc[
             companies.CompanyNumber.isin(company_numbers_psc)
         ].CompanyNumber.values
@@ -120,6 +120,10 @@ def get_company_company_link(
     psc_companies = psc_companies.dropna(subset=["company_name"])
 
     # Fill owned companies that have already been indexed as owners of other companies
+    if "company_number" not in companies.columns:
+        companies = companies.rename(columns={"CompanyNumber": "company_number"})
+    if "company_name" not in companies.columns:
+        companies = companies.rename(columns={"CompanyName": "company_name"})
     names_owned = companies.loc[
         companies.company_number.isin(psc_companies.company_number),
         ["company_number", "company_name"],
@@ -131,7 +135,7 @@ def get_company_company_link(
         .reset_index()
     )
 
-    ### 1 - Index Owners already indexed
+    # 1 - Index Owners already indexed
     already_indexed_owners = small_firstlink[
         small_firstlink.company_name.isin(psc_companies.company_name.unique())
     ][["company_name", "idx_company"]].drop_duplicates()
@@ -142,7 +146,7 @@ def get_company_company_link(
         .reset_index()
     )
 
-    ### 2 - Index Owners not seen before
+    # 2 - Index Owners not seen before
 
     # do not take into account those that appear in company_names_2
     idxs_nan = psc_companies.idx_company.isna()
@@ -167,8 +171,8 @@ def get_company_company_link(
         psc_companies.groupby("company_name")["idx_company"].transform("first"), inplace=True
     )
 
-    #### Second companies
-    ### 1 - Index Owneds already indexed by company number
+    # Second companies
+    # 1 - Index Owneds already indexed by company number
     already_indexed_owneds_number = small_firstlink[
         small_firstlink.company_number.isin(psc_companies.company_number.unique())
     ][["company_number", "idx_company"]].drop_duplicates()
@@ -180,7 +184,7 @@ def get_company_company_link(
         .reset_index()
     )
 
-    ### 2 - Index Owneds already indexed in column 1 by name
+    # 2 - Index Owneds already indexed in column 1 by name
     # Fill owned companies that have already been indexed as owners of other companies
     unique_names_owned = names_owned.company_name.unique()
     min_ = max_
@@ -218,8 +222,8 @@ def get_list_unique_natures_of_control(psc: pd.DataFrame) -> list:
     list_unique_natures = []
     for _, list_str in enumerate(natures):
         if list_str != "":
-            l = eval(list_str)
-            for element in l:
+            eval_list = eval(list_str)
+            for element in eval_list:
                 list_unique_natures.append(element)
 
     list_unique_natures = np.unique(np.array(list_unique_natures))

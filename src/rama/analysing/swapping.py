@@ -1,13 +1,15 @@
 import random
+from collections import deque
+
 import networkx as nx
 import numpy as np
 
 
-#### Restrictions ####
+# Restrictions
 
 
 # First restriction
-def no_cycles(subgraph):
+def no_cycles(subgraph: nx.DiGraph) -> bool:
     """Function to check that a graph does not have cycles"""
     subgraph_undirected = subgraph.to_undirected()
     list_cycles = nx.cycle_basis(subgraph_undirected)
@@ -15,7 +17,7 @@ def no_cycles(subgraph):
 
 
 # Second restriction
-def connected(subgraph):
+def connected(subgraph: nx.DiGraph) -> bool:
     """Function to check that graph stays as a single connected component"""
     connected_components = nx.weakly_connected_components(subgraph)
     list_ccs = list(connected_components)
@@ -23,43 +25,36 @@ def connected(subgraph):
 
 
 # Third restriction
-def no_more_than_two_per(subgraph, limit=2):
+def no_more_than_two_per(subgraph: nx.DiGraph, limit: int = 2) -> bool:
     """Function to check that a company does not contain more than two human owners"""
-    indegrees = [
-        subgraph.in_degree(node)
-        for node in subgraph.nodes
-        if subgraph.nodes[node]["human"]
-    ]
-    indegrees = np.array(indegrees)
+    indegrees = np.array(
+        [subgraph.in_degree(node) for node in subgraph.nodes if subgraph.nodes[node]["human"]]
+    )
     return not any(indegrees > limit)
 
 
 # Fourth restriction
-def only_human_roots(subgraph):
+def only_human_roots(subgraph: nx.DiGraph) -> bool:
     """Function to check that a graph only contains human roots"""
     is_human = [
-        subgraph.nodes[node]["human"]
-        for node in subgraph.nodes
-        if subgraph.out_degree(node) == 0
+        subgraph.nodes[node]["human"] for node in subgraph.nodes if subgraph.out_degree(node) == 0
     ]
     return sum(is_human) == len(is_human)
 
 
 # Fifth restriction
-def no_slavery(subgraph):
+def no_slavery(subgraph: nx.DiGraph) -> bool:
     """Function to check that a human cannot own share of another human"""
     degrees = sum(
-        subgraph.out_degree(node)
-        for node in subgraph.nodes
-        if subgraph.nodes[node]["human"]
+        subgraph.out_degree(node) for node in subgraph.nodes if subgraph.nodes[node]["human"]
     )
     return degrees == 0
 
 
-#### Alterations ####
+# Alterations
 
 
-def one_swap(subgraph, change="origin"):
+def one_swap(subgraph: nx.DiGraph, change: str = "origin") -> nx.DiGraph:
     """
     Function to swap an edge in a given graph.
     By default, we are only changing the source of a link.
@@ -97,7 +92,7 @@ def one_swap(subgraph, change="origin"):
     return subgraph_copy
 
 
-def check_if_subgraph_passes(subgraph, checks):
+def check_if_subgraph_passes(subgraph: nx.DiGraph, checks: deque) -> bool:
     """Function to check if a subgraph passes the given restrictions"""
     passed = []
     for func in checks:
@@ -108,7 +103,9 @@ def check_if_subgraph_passes(subgraph, checks):
     return sum_ == len(checks)
 
 
-def get_swapped_subgraph(subgraph, checks, n_tries=100, change="random"):
+def get_swapped_subgraph(
+    subgraph: nx.DiGraph, checks: deque, n_tries: int = 100, change: str = "random"
+) -> nx.DiGraph | None:
     """Function that returns a subgraph with an edge swap passing all the checks"""
     n_try = 0
     passing = False
@@ -120,3 +117,4 @@ def get_swapped_subgraph(subgraph, checks, n_tries=100, change="random"):
         return None
     if passing:
         return swapped_subgraph
+    return None
