@@ -1,3 +1,5 @@
+"""Python file with static lists"""
+
 human_kinds = [
     "individual-person-with-significant-control",
     "individual-beneficial-owner",

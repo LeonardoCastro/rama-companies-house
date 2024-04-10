@@ -1,3 +1,5 @@
+"""Differential evolution functions"""
+
 import random
 
 import numpy as np
@@ -30,8 +32,8 @@ def _get_losses_of_generations(subgraph, population, nodes_with_profit, loss_fun
 
 def _get_trial_and_target_vectors(population, differential_weight, crossover_probability):
     """Function to get a trial and target vector, part of the differential evolution algorithm"""
-    pop_size, len_companies = population.shape
-    sample = random.sample(range(pop_size), 4)
+    _, len_companies = population.shape
+    sample = random.sample(range(population.shape[0]), 4)
 
     target = sample[0]
     base = sample[1]

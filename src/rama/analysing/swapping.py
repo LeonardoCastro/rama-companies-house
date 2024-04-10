@@ -1,3 +1,5 @@
+"""Restrictions to swapping links in networks functions"""
+
 import random
 from collections import deque
 

@@ -1,3 +1,5 @@
+"""Transfer of money in networks function"""
+
 import networkx as nx
 
 

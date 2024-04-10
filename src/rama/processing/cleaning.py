@@ -1,3 +1,5 @@
+"""Cleaning functions"""
+
 from typing import Sequence
 
 import pandas as pd

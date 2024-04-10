@@ -1,10 +1,11 @@
 [project]
-name = "rama-companies-house"
-version = "0.1.1"
+name = "rama"
+version = "0.1.0"
 authors = [
     { name = "Leonardo C.G.", email = "leonardo_castro@ciencias.unam.mx" },
+    {name = "LeonardoCastro", email = "lmcastrogonzalez@turing.ac.uk"},
 ]
-description = "Rama: cleaning, processing and analysing Companies House data"
+description = "A Python package to clean, process and analyse Company House data"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -25,7 +26,6 @@ dependencies = [
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
-
 
 [tool.black]
 line-length = 100
@@ -49,6 +49,8 @@ disable = ["logging-fstring-interpolation", "redefined-outer-name"]
 ignore_missing_imports = true
 
 
+[tool.pdm]
+distribution = true
 [tool.pdm.dev-dependencies]
 dev = [
     "build>=1.0.3",

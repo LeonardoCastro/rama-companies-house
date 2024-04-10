@@ -1,6 +1,7 @@
-import pytest
+"""Pytest configuration file."""
 
 import pandas as pd
+import pytest
 
 
 @pytest.fixture(scope="function")

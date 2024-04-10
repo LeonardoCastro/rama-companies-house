@@ -1,6 +1,6 @@
-import pandas as pd
+"""Pytest tests"""
+
 from tqdm import tqdm
-import pytest
 
 
 def test_humans(init_first_link):

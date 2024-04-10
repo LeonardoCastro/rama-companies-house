@@ -1,3 +1,5 @@
+"""Analysis of graphs functions"""
+
 import datetime as dt
 from typing import Any, Sequence
 

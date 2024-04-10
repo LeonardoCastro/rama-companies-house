@@ -1,5 +1,8 @@
+"""Helper functions"""
+
 import os
 from typing import Sequence
+from ast import literal_eval
 
 import numpy as np
 import pandas as pd
@@ -222,7 +225,7 @@ def get_list_unique_natures_of_control(psc: pd.DataFrame) -> list:
     list_unique_natures = []
     for _, list_str in enumerate(natures):
         if list_str != "":
-            eval_list = eval(list_str)
+            eval_list = literal_eval(list_str)
             for element in eval_list:
                 list_unique_natures.append(element)
 
