@@ -39,16 +39,18 @@ def no_more_than_two_per(subgraph: nx.DiGraph, limit: int = 2) -> bool:
 def only_human_roots(subgraph: nx.DiGraph) -> bool:
     """Function to check that a graph only contains human roots"""
     is_human = [
-        subgraph.nodes[node]["human"] for node in subgraph.nodes if subgraph.out_degree(node) == 0
+        subgraph.nodes[node]
+        for node in subgraph.nodes
+        if subgraph.in_degree(node) == 0 and not subgraph.nodes[node]["human"]
     ]
-    return sum(is_human) == len(is_human)
+    return len(is_human) == 0
 
 
 # Fifth restriction
 def no_slavery(subgraph: nx.DiGraph) -> bool:
     """Function to check that a human cannot own share of another human"""
     degrees = sum(
-        subgraph.out_degree(node) for node in subgraph.nodes if subgraph.nodes[node]["human"]
+        subgraph.in_degree(node) for node in subgraph.nodes if subgraph.nodes[node]["human"]
     )
     return degrees == 0
 
@@ -65,6 +67,8 @@ def one_swap(subgraph: nx.DiGraph, change: str = "origin") -> nx.DiGraph:
     subgraph_copy = subgraph.copy()
     edges = list(subgraph_copy.edges)
     idx = np.random.randint(len(edges))
+    if len(edges) == 1 and len(subgraph.nodes) != 2:
+        edges = edges[0]
     node1, node2 = edges[idx]
     weight = subgraph.edges[edges[idx]]["weight"]
 
@@ -106,7 +110,7 @@ def check_if_subgraph_passes(subgraph: nx.DiGraph, checks: deque) -> bool:
 
 
 def get_swapped_subgraph(
-    subgraph: nx.DiGraph, checks: deque, n_tries: int = 100, change: str = "random"
+    subgraph: nx.DiGraph, checks: deque, n_tries: int = 1000, change: str = "random"
 ) -> nx.DiGraph | None:
     """Function that returns a subgraph with an edge swap passing all the checks"""
     n_try = 0

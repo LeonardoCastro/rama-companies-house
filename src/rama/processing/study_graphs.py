@@ -7,6 +7,23 @@ import networkx as nx
 import numpy as np
 
 
+# Dictionaries
+
+
+def dict_nodes(graph: nx.DiGraph) -> dict:
+    """Function to construct a dictionary with the information of the nodes of a graph"""
+    return dict(graph.nodes(data=True))
+
+
+def dict_edges(graph: nx.DiGraph) -> dict:
+    """Function to construct a dictionary with the information of the edges of a graph"""
+    dict_edges: dict[tuple, dict] = {}
+    for i, j, d in graph.edges(data=True):
+        dict_edges[(i, j)] = d
+
+    return dict_edges
+
+
 # Paths
 
 

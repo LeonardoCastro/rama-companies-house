@@ -22,7 +22,7 @@ The tool `conda`, which comes bundled with Anaconda has the advantage that it le
 A new environment can be created with
 
 ```bash
-$ conda create -n rama python=3.10 -y
+$ conda create -f environment.yaml
 ```
 
 Like before, the environment's name can be anything else instead of `rama` (simply change the name below). We activate it using
@@ -36,7 +36,6 @@ $ conda activate rama
 Once we are working inside an active virtual environment, we install (the dependencies and) the package by running
 
 ```bash
-[$ pip install -r requirements.txt]
 $ pip install -e .
 ```
 

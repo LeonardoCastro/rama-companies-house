@@ -179,7 +179,8 @@ def attr_leaf(
     leaf_df = pd.DataFrame(index=sorted(list(graph.nodes())))
     leaf_df["leaf"] = False
     leaf_df.loc[leafs, "leaf"] = True
-    leaf_dict = leaf_df.to_dict()["leaf"]
+    dummy_dict = leaf_df.to_dict()
+    leaf_dict = dummy_dict["leaf"]
 
     return leaf_dict
 

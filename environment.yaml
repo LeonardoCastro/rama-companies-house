@@ -1,0 +1,22 @@
+name: rama
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip=22.2
+    
+  # Core python
+  - numpy
+  - tqdm
+  - pandas
+  - ipykernel
+  - requests
+  - networkx
+
+  # Plotting
+  - matplotlib
+  - plotly
+  - seaborn
